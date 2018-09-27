@@ -2,8 +2,8 @@
 const int PinBocina =13; //Pin de bocina
 const int PinLedBlanco =12; //Pin de LED
 const int PinSwitchReed = 2; // Pin Switch Reed
-int frecMin = 100; //frecuencia más baja que se va a emitir
-int frecMax = 200; //frecuencia más alta que se va a emitir 
+int frecuencia=0;    
+int contador=0;
 
 void setup(){
     pinMode(PinSwitchReed, INPUT);
@@ -11,6 +11,7 @@ void setup(){
     pinMode(PinLedBlanco,OUTPUT);
     digitalWrite(PinLedBlanco, LOW);
     digitalWrite(PinBocina, LOW);
+   
     
     attachInterrupt(digitalPinToInterrupt(2),interrupcionAlarma,LOW);
 
@@ -29,15 +30,22 @@ void loop(){
     
 }
 /*definición de interrupcion de hardwareque se genera cuando la puerta esta habierta emite una alarma mediante la bocina 
- * y prende y apaga el led
+ * y prende y apaga el led.
+ * la frecuencia se va modificando para que emita sonidos distintos mientras se encuantre en la interrupcion
  */
 void interrupcionAlarma(){
-
- for(int i=frecMax; i<=frecMin; i++)
-         tone(PinBocina,i);
+        if(contador==0){
+          frecuencia=10000;
+          contador=1;
+        }else{
+          frecuencia=20000;
+          contador =0;
+        }
          digitalWrite(PinLedBlanco, HIGH);
-         delay(10000);
+         digitalWrite(PinBocina, HIGH);
+         delay(frecuencia);
+          digitalWrite(PinBocina,LOW);
          digitalWrite(PinLedBlanco, LOW); 
-         noTone(PinBocina);
+         delay(frecuencia);
   
 }
